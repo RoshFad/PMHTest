@@ -1,0 +1,25 @@
+﻿@model IEnumerable<PMHTest.Models.Employee>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @if (!string.IsNullOrEmpty(item.PhotoPath))
+            {
+                <img src="@item.PhotoPath" width="50" />
+            }
+            else
+            {
+                <img src="/img/default-avatar.jpg" width="50" />
+            }
+        </td>
+        <td>@(item.Department != null ? item.Department.DepartmentName : "")</td>
+        <td>@item.Name</td>
+        <td>@item.PhoneNumber</td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> 
+            
+            <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+        </td>
+    </tr>
+}

@@ -1,0 +1,51 @@
+﻿@model IEnumerable<PMHTest.Models.Employee>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Сотрудники</h1>
+
+<p>
+    <a asp-action="Create">Добавить сотрудника</a>
+</p>
+
+<div class="mb-3">
+    <input type="text" id="searchBox" class="form-control" placeholder="Поиск" />
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Department!.DepartmentName)</th>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.PhoneNumber)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="employeesBody">
+        @await Html.PartialAsync("EmployeesRow", Model)
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        const searchBox = document.getElementById('searchBox');
+        const employeesBody = document.getElementById('employeesBody');
+
+        let timer = null;
+
+        searchBox.addEventListener('input', function () {
+            clearTimeout(timer);
+
+            timer = setTimeout(async () => {
+                const value = searchBox.value;
+
+                const response = await fetch(`/Employees/Search?searchString=${encodeURIComponent(value)}`);
+                const html = await response.text();
+
+                employeesBody.innerHTML = html;
+            }, 300);
+        });
+    </script>
+}
